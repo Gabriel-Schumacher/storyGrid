@@ -210,7 +210,7 @@
 			<header class="rounded-[2rem] border border-stone-300/70 bg-white/85 px-5 py-4 shadow-[0_18px_60px_rgba(88,64,28,0.08)] backdrop-blur">
 				<div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 					<div class="space-y-2">
-						<p class="text-xs font-semibold uppercase tracking-[0.35em] text-stone-500">
+						<p class="text-xs font-semibold uppercase tracking-[0.35em] red-color">
 							Story Grid Scene Builder
 						</p>
 						<h1 class="font-serif text-3xl font-semibold tracking-tight text-stone-950 sm:text-4xl">
@@ -387,4 +387,3 @@
 		</div>
 	</div>
 {/if}
- 

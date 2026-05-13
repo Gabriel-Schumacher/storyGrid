@@ -90,7 +90,7 @@
 
 <style>
 	article.active {
-		border-color: rgb(168 162 158 / 0.8);
+		border-color: rgba(180, 94, 94, 0.9);
 		box-shadow: 0 0 0 1px rgba(168, 162, 158, 0.25), 0 20px 45px rgba(88, 64, 28, 0.11);
 	}
 

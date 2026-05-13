@@ -14,7 +14,7 @@
 <div class="space-y-5">
 	<div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
 		<div>
-			<p class="text-xs font-semibold uppercase tracking-[0.35em] text-stone-400">Scene metadata</p>
+			<p class="text-xs font-semibold uppercase tracking-[0.35em] red-color">Scene metadata</p>
 			<h2 class="mt-2 font-serif text-2xl font-semibold text-stone-950">Top-level context</h2>
 		</div>
 		<div class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
