@@ -4,9 +4,11 @@
 	interface Props {
 		scene: SceneRecord | undefined;
 		onUpdateMeta: (field: 'title' | 'povCharacter' | 'location' | 'valueShift', value: string) => void;
+		folders: { id: string; name: string }[];
+		onMoveFolder: (sceneId: string, folderId: string) => void;
 	}
 
-	let { scene, onUpdateMeta }: Props = $props();
+	let { scene, onUpdateMeta, folders, onMoveFolder }: Props = $props();
 </script>
 
 <div class="space-y-5">
@@ -22,6 +24,18 @@
 
 	{#if scene}
 		<div class="grid gap-4 lg:grid-cols-2">
+			<label class="space-y-2">
+				<span class="text-sm font-medium text-stone-700">Folder</span>
+				<select
+					value={scene.folderId}
+					onchange={(e) => onMoveFolder(scene.id, (e.currentTarget as HTMLSelectElement).value)}
+					class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-stone-500 focus:ring-4 focus:ring-stone-200"
+				>
+					{#each folders as f}
+						<option value={f.id}>{f.name}</option>
+					{/each}
+				</select>
+			</label>
 			<label class="space-y-2">
 				<span class="text-sm font-medium text-stone-700">Scene Title</span>
 				<input

@@ -153,6 +153,23 @@
 		uiState.update((s) => ({ ...s, deletingSceneId: null }));
 	}
 
+	function createFolder() {
+		const name = prompt('Folder name');
+		if (name && name.trim()) scenesStore.createFolder(name.trim());
+	}
+
+	function toggleFolderCollapse(folderId: string) {
+		scenesStore.toggleFolderCollapse(folderId);
+	}
+
+	function moveSceneToFolder(sceneId: string, folderId: string) {
+		scenesStore.moveSceneToFolder(sceneId, folderId);
+	}
+
+	function moveScene(sceneId: string, direction: 'up' | 'down') {
+		scenesStore.moveScene(sceneId, direction);
+	}
+
 	function summaryParagraph(scene: SceneRecord) {
 		const inciting = scene.commandments.incitingIncident.trim();
 		const complication = scene.commandments.progressiveComplication.trim();
@@ -177,10 +194,15 @@
 		<aside class="sticky top-4 hidden h-[calc(100vh-2rem)] w-72 shrink-0 rounded-3xl border border-stone-300/70 bg-white/80 p-4 shadow-[0_18px_60px_rgba(88,64,28,0.08)] backdrop-blur xl:block">
 			<SceneSidebar
 				scenes={sceneState.scenes}
+				folders={sceneState.folders}
 				activeSceneId={sceneState.activeSceneId}
 				onCreateScene={createNewScene}
 				onLoadScene={loadScene}
+					onMoveScene={moveScene}
 				onRequestDelete={requestDelete}
+				onCreateFolder={createFolder}
+				folderCollapsed={sceneState.folderCollapsed ?? {}}
+				onToggleFolderCollapse={toggleFolderCollapse}
 			/>
 		</aside>
 
@@ -227,7 +249,7 @@
 			</header>
 
 			<section class="rounded-[2rem] border border-stone-300/70 bg-white/85 p-5 shadow-[0_18px_60px_rgba(88,64,28,0.08)] backdrop-blur">
-				<SceneMetadata scene={activeScene} onUpdateMeta={updateMeta} />
+				<SceneMetadata scene={activeScene} folders={sceneState.folders} onUpdateMeta={updateMeta} onMoveFolder={moveSceneToFolder} />
 			</section>
 
 			<div class="grid flex-1 gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
