@@ -12,21 +12,31 @@
 		onCreateFolder: () => void;
 		folderCollapsed: Record<string, boolean>;
 		onToggleFolderCollapse: (folderId: string) => void;
+		onClose?: () => void;
 	}
 
-	let { scenes, folders, activeSceneId, onCreateScene, onLoadScene, onMoveScene, onRequestDelete, onCreateFolder, folderCollapsed, onToggleFolderCollapse }: Props = $props();
+	let { scenes, folders, activeSceneId, onCreateScene, onLoadScene, onMoveScene, onRequestDelete, onCreateFolder, folderCollapsed, onToggleFolderCollapse, onClose }: Props = $props();
 </script>
 
 <div class="flex h-full flex-col gap-4">
 	<div>
-		<p class="text-xs font-semibold uppercase tracking-[0.35em] text-stone-400">Scenes</p>
-		<h2 class="mt-2 font-serif text-2xl font-semibold text-stone-950">Workspace</h2>
+		<div class="flex items-start justify-between gap-3">
+			<div>
+				<p class="text-xs font-semibold uppercase tracking-[0.35em] text-stone-400">Scenes</p>
+				<h2 class="mt-2 font-serif text-2xl font-semibold text-stone-950">Workspace</h2>
+			</div>
+			{#if onClose}
+				<button type="button" onclick={onClose} class="rounded-full border border-stone-200 bg-white px-3 py-2 text-xs font-medium text-stone-600 xl:hidden">
+					Close
+				</button>
+			{/if}
+		</div>
 		<p class="mt-2 text-sm leading-6 text-stone-600">
 			Save and switch between scenes without leaving the editor.
 		</p>
 	</div>
 
-	<div class="flex gap-2">
+	<div class="flex flex-col gap-2 sm:flex-row">
 		<button
 			type="button"
 			onclick={onCreateScene}
@@ -62,7 +72,7 @@
 				{#if !folderCollapsed[folder.id]}
 					<div class="space-y-2">
 						{#each scenes.filter((s) => s.folderId === folder.id) as scene, index}
-							<div class="flex items-center gap-2">
+							<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 							<button
 								type="button"
 								onclick={() => onLoadScene(scene.id)}
@@ -82,12 +92,12 @@
 									</span>
 								</div>
 							</button>
-							<div class="flex flex-col gap-1">
+							<div class="flex flex-row gap-2 sm:flex-col sm:gap-1">
 								<button
 									type="button"
 									onclick={() => onMoveScene(scene.id, 'up')}
 									disabled={index === 0}
-									class="rounded-full border border-stone-200 bg-white px-2 py-1 text-[11px] font-medium text-stone-500 transition hover:border-stone-300 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-30"
+									class="rounded-full border border-stone-200 bg-white px-3 py-2 text-sm font-medium text-stone-500 transition hover:border-stone-300 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-30"
 									aria-label={`Move ${scene.title} up`}
 								>
 									↑
@@ -96,7 +106,7 @@
 									type="button"
 									onclick={() => onMoveScene(scene.id, 'down')}
 									disabled={index === scenes.filter((s) => s.folderId === folder.id).length - 1}
-									class="rounded-full border border-stone-200 bg-white px-2 py-1 text-[11px] font-medium text-stone-500 transition hover:border-stone-300 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-30"
+									class="rounded-full border border-stone-200 bg-white px-3 py-2 text-sm font-medium text-stone-500 transition hover:border-stone-300 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-30"
 									aria-label={`Move ${scene.title} down`}
 								>
 									↓

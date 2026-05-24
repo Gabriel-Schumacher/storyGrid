@@ -73,6 +73,8 @@
 		,deletingSceneId: null as string | null
 	});
 
+	let mobileSidebarOpen = $state(false);
+
 	let sceneState = $derived($scenesStore);
 	let activeScene = $derived(
 		sceneState.scenes.find((scene) => scene.id === sceneState.activeSceneId) ?? sceneState.scenes[0]
@@ -119,11 +121,13 @@
 	function createNewScene() {
 		scenesStore.createScene();
 		uiState.update((state) => ({ ...state, focusedCommandment: null }));
+		mobileSidebarOpen = false;
 	}
 
 	function loadScene(sceneId: string) {
 		scenesStore.loadScene(sceneId);
 		uiState.update((state) => ({ ...state, focusedCommandment: null }));
+		mobileSidebarOpen = false;
 	}
 
 	function toggleCollapsed(key: CommandmentKey) {
@@ -170,6 +174,14 @@
 		scenesStore.moveScene(sceneId, direction);
 	}
 
+	function openMobileSidebar() {
+		mobileSidebarOpen = true;
+	}
+
+	function closeMobileSidebar() {
+		mobileSidebarOpen = false;
+	}
+
 	function summaryParagraph(scene: SceneRecord) {
 		const inciting = scene.commandments.incitingIncident.trim();
 		const complication = scene.commandments.progressiveComplication.trim();
@@ -206,6 +218,49 @@
 			/>
 		</aside>
 
+		{#if mobileSidebarOpen}
+			<div class="fixed inset-0 z-50 xl:hidden">
+				<button
+					type="button"
+					class="absolute inset-0 bg-black/40"
+					onclick={closeMobileSidebar}
+					aria-label="Close scenes drawer"
+				></button>
+				<div class="absolute inset-0 bg-[#f7f2e8] shadow-2xl">
+					<div class="flex h-full flex-col">
+						<div class="flex items-center justify-between border-b border-stone-200 px-4 py-4">
+							<div>
+								<p class="text-xs font-semibold uppercase tracking-[0.35em] text-stone-400">Scenes</p>
+								<p class="mt-1 font-serif text-xl font-semibold text-stone-950">Workspace</p>
+							</div>
+							<button
+								type="button"
+								onclick={closeMobileSidebar}
+								class="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700"
+							>
+								Close
+							</button>
+						</div>
+						<div class="min-h-0 flex-1 overflow-y-auto p-4">
+							<SceneSidebar
+								scenes={sceneState.scenes}
+								folders={sceneState.folders}
+								activeSceneId={sceneState.activeSceneId}
+								onCreateScene={createNewScene}
+								onLoadScene={loadScene}
+								onMoveScene={moveScene}
+								onRequestDelete={requestDelete}
+								onCreateFolder={createFolder}
+								folderCollapsed={sceneState.folderCollapsed ?? {}}
+								onToggleFolderCollapse={toggleFolderCollapse}
+								onClose={closeMobileSidebar}
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		{/if}
+
 		<main class="flex min-h-screen flex-1 flex-col gap-5">
 			<header class="rounded-[2rem] border border-stone-300/70 bg-white/85 px-5 py-4 shadow-[0_18px_60px_rgba(88,64,28,0.08)] backdrop-blur">
 				<div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -223,6 +278,13 @@
 					</div>
 
 					<div class="flex flex-wrap items-center gap-3">
+						<button
+							type="button"
+							onclick={openMobileSidebar}
+							class="rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm font-medium text-stone-700 transition hover:-translate-y-0.5 hover:bg-stone-100 xl:hidden"
+						>
+							Scenes & folders
+						</button>
 						<div class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
 							<div class="text-xs uppercase tracking-[0.25em] text-stone-400">Progress</div>
 							<div class="mt-1 text-base font-semibold text-stone-900">
